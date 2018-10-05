@@ -46,6 +46,10 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     var imageArr = Array<Array<UIImage?>>()
 
     var select = Select()
+    var cellSelect = -1
+    var selectColorP1 = UIColor()
+    var selectColorP2 = UIColor()
+    var selectColorCell = UIColor()
     var tokenOwerArr = [[2,2,2],[2,2,2]] // [smal,mid,big]
 
     let arr = [[Token(),Token(),Token()],
@@ -57,6 +61,9 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         myCollectionView.delegate = self
         myCollectionView.dataSource = self
 
+        selectColorP1 = UIColor(red: 0.8, green: 0.1, blue: 0.1, alpha: 0.4)
+        selectColorP2 = UIColor(red: 0.4, green: 0.2, blue: 0.1, alpha: 0.4)
+        selectColorCell = UIColor(red: 0.3, green: 0.7, blue: 1, alpha: 0.4)
 
         ivArr = [[p1SmallIV,p1MidIV,p1BigIV],[p2SmallIV,p2MidIV,p2BigIV]]
         let p1ZeroImage = UIImage(named: "")
@@ -125,10 +132,21 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
 
         let title:String = winResut == p1Win ? "P1 win" : "P2 win"
         if winResut == p1Win || winResut == p2Win{
+
             let alertView = UIAlertController(title: title, message: "", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
             alertView.addAction(action)
+
+            let winImage = UIImage(named: winResut == p1Win ? "p3-big.png" : "p4-big.png")!
+            let imageViewLeft = UIImageView(frame: CGRect(x: alertView.view.frame.width/2-20, y: 0, width: 70, height: 70))
+            let imageViewRight = UIImageView(frame: CGRect(x: 20, y: 0, width: 70, height: 70))
+            imageViewLeft.image = winImage
+            imageViewRight.image = winImage
+            alertView.view.addSubview(imageViewLeft)
+            alertView.view.addSubview(imageViewRight)
+            print("alertView = \(alertView.view.frame)")
             self.present(alertView, animated: true, completion: nil)
+
         }
     }
 
@@ -171,6 +189,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 1
                 select.power = 3
+                UIView.animate(withDuration: 0.5) {
+                    self.p1BigView.backgroundColor = self.selectColorP1
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p1BigView.backgroundColor = UIColor.clear
+                }
             }
         case p1MidBtn:
             if select.belong == 1 && select.power == 2{
@@ -179,6 +203,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 1
                 select.power = 2
+                UIView.animate(withDuration: 0.5) {
+                    self.p1MidView.backgroundColor = self.selectColorP1
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p1MidView.backgroundColor = UIColor.clear
+                }
             }
         case p1SmaBtn:
             if select.belong == 1 && select.power == 1{
@@ -187,6 +217,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 1
                 select.power = 1
+                UIView.animate(withDuration: 0.5) {
+                    self.p1SmallView.backgroundColor = self.selectColorP1
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p1SmallView.backgroundColor = UIColor.clear
+                }
             }
         case p2BigBtn:
             if select.belong == 2 && select.power == 3{
@@ -195,6 +231,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 2
                 select.power = 3
+                UIView.animate(withDuration: 0.5) {
+                    self.p2BigView.backgroundColor = self.selectColorP2
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p2BigView.backgroundColor = UIColor.clear
+                }
             }
         case p2MidBtn:
             if select.belong == 2 && select.power == 2{
@@ -203,6 +245,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 2
                 select.power = 2
+                UIView.animate(withDuration: 0.5) {
+                    self.p2MidView.backgroundColor = self.selectColorP2
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p2MidView.backgroundColor = UIColor.clear
+                }
             }
         case p2SmaBtn:
             if select.belong == 2 && select.power == 1{
@@ -211,6 +259,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 2
                 select.power = 1
+                UIView.animate(withDuration: 0.5) {
+                    self.p2SmallView.backgroundColor = self.selectColorP2
+                }
+                UIView.animate(withDuration: 1) {
+                    self.p2SmallView.backgroundColor = UIColor.clear
+                }
             }
         default:
             break
@@ -239,6 +293,7 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
 
         let row:Int = indexPath.item / 3
         let colum:Int = indexPath.item % 3
+        cellSelect = indexPath.item
 
         // Move status
         if select.belong == 0 && select.power == 0 && select.mod == takeMode{
@@ -296,7 +351,6 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }
 
         }
-
     }
 
 
@@ -319,10 +373,23 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         return 9
     }
 
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+
+        if cellSelect == indexPath.item{
+            UIView.animate(withDuration: 0.25) {
+                cell.backgroundColor = self.selectColorCell
+            }
+            UIView.animate(withDuration: 0.5) {
+                cell.backgroundColor = UIColor.clear
+            }
+        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell_main", for: indexPath) as! MainCollectionViewCell
         cell.layer.borderWidth = 1
-        cell.layer.borderColor = UIColor.black.cgColor
+        cell.layer.cornerRadius = 22
+        cell.layer.borderColor = UIColor(red: 0.4, green: 0.8, blue: 0.2, alpha: 1).cgColor
 
         let row:Int = indexPath.item / 3
         let colum:Int = indexPath.item % 3
@@ -354,7 +421,6 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
 
         return cell
     }
-
 
 
 }
