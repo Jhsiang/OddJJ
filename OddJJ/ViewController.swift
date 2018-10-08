@@ -144,16 +144,14 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             imageViewRight.image = winImage
             alertView.view.addSubview(imageViewLeft)
             alertView.view.addSubview(imageViewRight)
-            print("alertView = \(alertView.view.frame)")
-            self.present(alertView, animated: true, completion: nil)
 
+            self.present(alertView, animated: true, completion: nil)
         }
     }
 
     //MARK: - Button Click
     func refreshSellectBtn(){
-        var btnEnableList = Array<Bool>()
-
+        let btnArr = [[p1SmaBtn,p1MidBtn,p1BigBtn],[p2SmaBtn,p2MidBtn,p2BigBtn]]
         for player in 0...1{
             for power in 0...2{
 
@@ -161,19 +159,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
                 ivArr[player][power].image = imageArr[player][num]
 
                 if num == 0 {
-                    btnEnableList.append(false)
+                    btnArr[player][power].isEnabled = false
                 }else{
-                    btnEnableList.append(true)
+                    btnArr[player][power].isEnabled = true
                 }
             }
         }
-        p1SmaBtn.isEnabled = btnEnableList[0]
-        p1MidBtn.isEnabled = btnEnableList[1]
-        p1BigBtn.isEnabled = btnEnableList[2]
-
-        p2SmaBtn.isEnabled = btnEnableList[3]
-        p2MidBtn.isEnabled = btnEnableList[4]
-        p2BigBtn.isEnabled = btnEnableList[5]
     }
 
     @IBAction func btnClick(_ sender: UIButton) {
@@ -231,6 +222,7 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
             }else{
                 select.belong = 2
                 select.power = 3
+
                 UIView.animate(withDuration: 0.5) {
                     self.p2BigView.backgroundColor = self.selectColorP2
                 }

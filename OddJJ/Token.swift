@@ -11,13 +11,13 @@ import Foundation
 class Select {
     var power = 0
     var belong = 0
-    var mod = 0
+    var mod = 0 // addMode,takeMode,moveMode
 }
 
 class Token {
     private var power = 0 //1,2,3
     private var belong = 0 //1,2
-    private var statusArr = [[0,0,0],[0,0,0]]
+    private var statusArr = [[0,0,0],[0,0,0]] //每格的狀態[0][0]位置為P1放入最小Token, [1][2]位置為P2放入最大TokenJ
 
     func showBelong() -> Int{
         return belong
@@ -50,13 +50,6 @@ class Token {
         guard setPower <= 3 && setPower >= 1 else{
             return false
         }
-
-        // 所屬不能相等
-        /*
-        guard setBelong != belong else{
-            return false
-        }
-         */
 
         // 設定值要大於原始值
         guard setPower > power else{
@@ -99,6 +92,7 @@ class Token {
                 }
             }
         }
+
         return true
     }
 
